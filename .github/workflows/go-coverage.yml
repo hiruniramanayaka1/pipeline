@@ -43,9 +43,15 @@ jobs:
           persist-credentials: false
 
       - name: Set up Go
-        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e  # v7.0.0
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: "${{ github.workspace }}/src/github.com/tektoncd/pipeline/go.mod"
+
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('src/github.com/tektoncd/pipeline/go.mod', 'src/github.com/tektoncd/pipeline/go.sum') }}
 
       - name: Generate coverage
         working-directory: ${{ github.workspace }}/src/github.com/tektoncd/pipeline
